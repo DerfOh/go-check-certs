@@ -1,2 +1,0 @@
-google.com:443
-amazon.com:443
