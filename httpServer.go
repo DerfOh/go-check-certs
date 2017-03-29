@@ -1,34 +1,43 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
+	"github.com/gorilla/mux"
+	"log"
 	"net/http"
-	"os"
+	"time"
 )
 
 func serveHTTP() {
-	http.HandleFunc("/results.csv", handler)
-	http.ListenAndServe(":8080", nil)
+	var dir string
+
+	dir = "./results"
+	// flag.StringVar(&dir, "dir", ".", "the directory to serve files from. Defaults to the current dir")
+	// flag.Parse()
+
+	r := mux.NewRouter()
+	r.HandleFunc("/", HomeHandler)
+	r.HandleFunc("/refresh", RefreshHandler)
+
+	// This will serve files under http://localhost:8000/results/<filename>
+	r.PathPrefix("/results/").Handler(http.StripPrefix("/results/", http.FileServer(http.Dir(dir))))
+
+	srv := &http.Server{
+		Handler:      r,
+		Addr:         "127.0.0.1:8000",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	log.Fatal(srv.ListenAndServe())
 }
 
-func handler(response http.ResponseWriter, request *http.Request) {
-	//response.Header().Set("Content-type", "text/html")
-	response.Header().Set("Content-type", "text/csv")
+// HomeHandler for home requests
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Welcome!!\n"))
+}
+
+// RefreshHandler removes results file, then generates a new one
+func RefreshHandler(w http.ResponseWriter, r *http.Request) {
 	refreshResults()
-	webpage, err := ioutil.ReadFile("results.csv")
-	if err != nil {
-		http.Error(response, fmt.Sprintf("results.csv file error %v", err), 500)
-	}
-	fmt.Fprint(response, string(webpage))
-}
-
-// remove results file, then generate a new one
-func refreshResults(){
-	err := os.Remove("results.csv")
-	createOutPutFile()
-	processHosts()
-	if err != nil {
-		fmt.Println(err)
-	}
+	w.Write([]byte("Refresh page to view results."))
 }

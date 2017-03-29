@@ -7,7 +7,7 @@ import (
 )
 
 func outPutFile(outPut error) error {
-	f, err := os.OpenFile("results.csv", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	f, err := os.OpenFile("results/results.csv", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func outPutFile(outPut error) error {
 
 func createOutPutFile() {
 	// write output file
-	f, err := os.Create("results.csv")
+	f, err := os.Create("results/results.csv")
 	check(err)
 	defer f.Close()
 
@@ -33,6 +33,14 @@ func createOutPutFile() {
 	check(err)
 	w.Flush()
 	f.Close()
+}
+func refreshResults() {
+	err := os.Remove("results/results.csv")
+	createOutPutFile()
+	processHosts()
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func check(err error) {

@@ -1,0 +1,92 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Results</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#callGo").on('click', function() {
+                $.ajax({
+                    url: "http://localhost:8000/refresh",
+                    method: "GET",
+                    success: function(data) {
+                        $("#response").html(data);
+                    },
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+    promise = $.ajax({
+        type:"GET",
+        dataType:"text",
+        url:"/results/results.csv",
+        cache:false
+    });
+
+    promise.done(function(data){
+
+        //Parse CSV File
+        //split on new line
+        var dataArr = data.split("\n");
+
+        //for each line in array
+        $.each(dataArr,function(){
+            if (this != "") {
+
+                //split files and create row
+                var row = new String("");
+                valArr = this.split(",");
+                    row += "<tr>"
+
+                $.each(valArr, function(){
+                    row += "<td>" + this +"</td>"
+                });     
+
+                    row += "</tr>"
+
+                    //Add row to table
+                    $('tbody').append(row);
+
+            }
+
+        });
+
+    });
+
+    // Run script if request fails
+    promise.fail(function() {
+       console.log('A failure ocurred');
+    });
+
+});</script>
+</head>
+
+<body>
+    <h3>Results</h3> 
+    <p>
+        <button id="callGo" type="submit">Refresh Results</button><div id="response">
+        </div><a href=/results/> <button type="button">Refresh Page</button></a>
+    </p>
+    <p><tr>><a href=/results/results.csv>CSV</a></tr></p>
+    
+    <!-- results table -->
+    <p>
+    <table>
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+    </table>
+    </p>
+</body>
+</html>
