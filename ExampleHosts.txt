@@ -1,2 +1,5 @@
 google.com:443
 amazon.com:443
+github.com:443
+duckduckgo.com:443
+reddit.com:443
