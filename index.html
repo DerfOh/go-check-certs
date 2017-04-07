@@ -2,7 +2,12 @@
 <head>
     <meta charset="utf-8">
     <title>Results</title>
+    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Bootstrap js -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#callGo").on('click', function() {
@@ -65,16 +70,30 @@
 </head>
 
 <body>
+
+    <!-- index.html -->
+    <h3>Refresh Results</h3>
+    {{if .Success}}
+        <h3>Results Refreshed!</h3>
+        <form method="POST">
+            <input type="submit" class="btn btn-default">
+        </form>
+    {{else}}
+        <form method="POST">
+            <input type="submit" class="btn btn-default">
+        </form>
+    {{end}}
+
     <h3>Results</h3> 
     <p>
-        <button id="callGo" type="submit">Refresh Results</button><div id="response">
-        </div><a href=/results/> <button type="button">Refresh Page</button></a>
+        <button id="callGo" type="submit" class="btn btn-default">Refresh Results</button><div id="response">
+        </div><a href=/./> <button type="button" class="btn btn-default">Refresh Page</button></a>
     </p>
     <p><tr>><a href=/results/results.csv>CSV</a></tr></p>
     
     <!-- results table -->
     <p>
-    <table>
+    <table class="table">
     <thead>
         <tr>
             <th></th>
