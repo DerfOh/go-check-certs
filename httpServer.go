@@ -35,25 +35,12 @@ func serveHTTP() {
 
 	srv := &http.Server{
 		Handler:      r,
-		Addr:         "127.0.0.1:8000",
+		Addr:         "127.0.0.1:8080",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
 
 	log.Fatal(srv.ListenAndServe())
-
-	//tmpl := template.Must(template.ParseFiles("results/index.html"))
-
-	// http.HandleFunc("/results/", func(w http.ResponseWriter, r *http.Request) {
-	// 	if r.Method != http.MethodPost {
-	// 		tmpl.Execute(w, nil)
-	// 		return
-	// 	}
-
-	// 	tmpl.Execute(w, struct{ Success bool }{true})
-	// })
-
-	// http.ListenAndServe(":8080", nil)
 }
 
 // HomeHandler for home requests
@@ -63,7 +50,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, nil)
 		return
 	}
-
+	
+	refreshResults()
 	tmpl.Execute(w, struct{ Success bool }{true})
 }
 
