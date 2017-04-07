@@ -1,3 +1,4 @@
+<!-- index.html -->
 <html>
 <head>
     <meta charset="utf-8">
@@ -8,21 +9,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- Bootstrap js -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#callGo").on('click', function() {
-                $.ajax({
-                    url: "http://localhost:8000/refresh",
-                    method: "GET",
-                    success: function(data) {
-                        $("#response").html(data);
-                    },
-                });
-            });
-        });
-    </script>
+    <!-- function to turn csv into table -->
     <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
 
     promise = $.ajax({
         type:"GET",
@@ -66,45 +55,48 @@
        console.log('A failure ocurred');
     });
 
-});</script>
+    });
+    </script>
+        <script type="text/javascript">
+        $(function(){
+            $('#loadingButton').click(function(){
+                  var btn = $(this); 
+                  btn.button('loading');
+            });
+        });
+    </script>
 </head>
 
 <body>
 
-    <!-- index.html -->
     <h3>Refresh Results</h3>
     {{if .Success}}
-        <h3>Results Refreshed!</h3>
         <form method="POST">
-            <input type="submit" class="btn btn-default">
+            <button type="submit" class="btn btn-default" id="loadingButton" data-loading-text="Scanning...">Perform Scan</button>
+            <p>Scan Complete.</p>
         </form>
     {{else}}
         <form method="POST">
-            <input type="submit" class="btn btn-default">
+            <button type="submit" class="btn btn-default" id="loadingButton" data-loading-text="Scanning...">Perform Scan</button>
         </form>
     {{end}}
 
-    <h3>Results</h3> 
-    <p>
-        <button id="callGo" type="submit" class="btn btn-default">Refresh Results</button><div id="response">
-        </div><a href=/./> <button type="button" class="btn btn-default">Refresh Page</button></a>
-    </p>
     <p><tr>><a href=/results/results.csv>CSV</a></tr></p>
     
     <!-- results table -->
     <p>
     <table class="table">
-    <thead>
-        <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
 
-    </tbody>
+        </tbody>
     </table>
     </p>
 </body>
