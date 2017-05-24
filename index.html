@@ -57,7 +57,7 @@
 
     });
     </script>
-        <script type="text/javascript">
+    <script type="text/javascript">
         $(function(){
             $('#loadingButton').click(function(){
                   var btn = $(this); 
@@ -68,16 +68,30 @@
 </head>
 
 <body>
-
-    <h3>Refresh Results</h3>
     {{if .Success}}
         <form method="POST">
-            <button type="submit" class="btn btn-default" id="loadingButton" data-loading-text="Scanning...">Perform Scan</button>
-            <p>Scan Complete.</p>
+            <h1>go-check-certs</h1>
+            <p><u>Last Scan Completed at</u> <div id="date"></div></p>
+            <p>
+                <label>Add/Remove: </label>
+                <input type="text" name="hostname" value="google.com" >
+                <button type="submit" class="btn btn-default" id="addHost" data-loading-text="Adding...">+</button>
+                <button type="submit" class="btn btn-default" id="removeHost" data-loading-text="Removing...">-</button>
+                <button type="submit" class="btn btn-default" id="loadingButton" data-loading-text="Scanning...">Refresh</button><br />
+            </p>
+            
         </form>
     {{else}}
         <form method="POST">
-            <button type="submit" class="btn btn-default" id="loadingButton" data-loading-text="Scanning...">Perform Scan</button>
+            <h1>go-check-certs</h1>
+            <p><u>Last Scan Completed at</u> <div id="date"></div></p>
+            <p>
+                <label>Add/Remove: </label>
+                <input type="text" name="hostname" value="google.com" >
+                <button type="submit" class="btn btn-default" id="addHost" data-loading-text="Adding...">+</button>
+                <button type="submit" class="btn btn-default" id="removeHost" data-loading-text="Removing...">-</button>
+                <button type="submit" class="btn btn-default" id="loadingButton" data-loading-text="Scanning...">Refresh</button><br />
+            </p>
         </form>
     {{end}}
 
@@ -99,5 +113,8 @@
         </tbody>
     </table>
     </p>
+    <script>
+        document.getElementById("date").innerHTML = Date();
+    </script>
 </body>
 </html>

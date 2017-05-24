@@ -13,11 +13,9 @@ import (
 // 	"html/template"
 // 	"net/http"
 // )
-// type ContactDetails struct {
-// 	Email   string
-// 	Subject string
-// 	Message string
-// }
+type HostName struct {
+	name   string
+}
 
 func serveHTTP() {
 	var dir string
