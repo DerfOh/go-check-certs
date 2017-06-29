@@ -3,20 +3,18 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"strings"
 )
 
 func outPutFile(outPut error) error {
 	f, err := os.OpenFile("results/results.csv", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
-	if err != nil {
-		return err
-	}
+	check(err)
 	defer f.Close()
 
 	_, err = f.WriteString(outPut.Error() + "\n")
-	if err != nil {
-		return err
-	}
+	check(err)
 	return nil
 
 }
@@ -34,13 +32,41 @@ func createOutPutFile() {
 	w.Flush()
 	f.Close()
 }
+
 func refreshResults() {
 	err := os.Remove("results/results.csv")
 	createOutPutFile()
 	processHosts()
+	check(err)
+}
+
+func addHost(s string) {
+	f, err := os.OpenFile(*hostsFile, os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
+
+	defer f.Close()
+
+	if _, err = f.WriteString("\n" + s); err != nil {
+		panic(err)
+	}
+}
+
+func removeHost(s string) {
+	input, err := ioutil.ReadFile(*hostsFile)
+	check(err)
+
+	lines := strings.Split(string(input), "\n")
+
+	for i, line := range lines {
+		if strings.Contains(line, s) {
+			lines[i] = ""
+		}
+	}
+	output := strings.Join(lines, "\n")
+	err = ioutil.WriteFile(*hostsFile, []byte(output), 0644)
+	check(err)
 }
 
 func check(err error) {

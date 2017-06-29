@@ -68,50 +68,68 @@
 </head>
 
 <body>
+    <div class="panel panel-info">
+        <div class="panel-heading"><h1><button class="btn btn-default" data-toggle="collapse" data-target="#addRemove">&#9776;</button> go-check-certs</h1></div>
+        <div id="addRemove" class="collapse">
     {{if .Success}}
-        <form method="POST">
-            <h1>go-check-certs</h1>
-            <p><u>Last Scan Completed at</u> <div id="date"></div></p>
-            <p>
-                <label>Add/Remove: </label>
-                <input type="text" name="hostname" value="google.com" >
-                <button type="submit" class="btn btn-default" id="addHost" data-loading-text="Adding...">+</button>
-                <button type="submit" class="btn btn-default" id="removeHost" data-loading-text="Removing...">-</button>
-                <button type="submit" class="btn btn-default" id="loadingButton" data-loading-text="Scanning...">Refresh</button><br />
-            </p>
-            
-        </form>
+            <div class="panel panel-body">
+                <form>
+                    <u>Last Scan Completed at</u> <div id="date"></div>
+                    <p>
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="submit" name="submit" value="add" class="btn btn-default" id="addHost" data-loading-text="Adding..." formmethod="POST" formaction="/">+</button>
+                                <button type="submit" name= "submit" value="remove" class="btn btn-default" id="removeHost" data-loading-text="Removing..." formmethod="POST">-</button>
+                                <button type="submit" name="submit" value="refresh" class="btn btn-default" id="loadingButton" data-loading-text="Scanning..." formmethod="POST" formaction="/">Refresh</button><br />                                
+                            </div>
+                            <input type="text" class="form-control" name="hostname" value="" aria-label="...">
+                        </div>                 
+                    </p>
+                </form>
+            </div>
     {{else}}
-        <form method="POST">
-            <h1>go-check-certs</h1>
-            <p><u>Last Scan Completed at</u> <div id="date"></div></p>
-            <p>
-                <label>Add/Remove: </label>
-                <input type="text" name="hostname" value="google.com" >
-                <button type="submit" class="btn btn-default" id="addHost" data-loading-text="Adding...">+</button>
-                <button type="submit" class="btn btn-default" id="removeHost" data-loading-text="Removing...">-</button>
-                <button type="submit" class="btn btn-default" id="loadingButton" data-loading-text="Scanning...">Refresh</button><br />
-            </p>
-        </form>
+            <div class="panel panel-body">
+                <form>
+                    <u>First Scan Completed at</u> <div id="date"></div>
+                    <p>
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="submit" name="submit" value="add" class="btn btn-default" id="addHost" data-loading-text="Adding..." formmethod="POST" formaction="/">+</button>
+                                <button type="submit" name= "submit" value="remove" class="btn btn-default" id="removeHost" data-loading-text="Removing..." formmethod="POST">-</button>
+                                <button type="submit" name="submit" value="refresh" class="btn btn-default" id="loadingButton" data-loading-text="Scanning..." formmethod="POST" formaction="/">Refresh</button><br />                                
+                            </div>
+                            <input type="text" class="form-control" name="hostname" value="" aria-label="...">
+                        </div>                 
+                    </p>
+                </form>
+            </div>
     {{end}}
-
-    <p><tr>><a href=/results/results.csv>CSV</a></tr></p>
+        </div>
+        <div class="panel-footer"></div>
+    </div>
     
     <!-- results table -->
     <p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h4>Results</h4></div>
+            <div class="panel panel-body">
+                <p>><a href=/results/results.csv>CSV</a></p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-        </tbody>
-    </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer"></div>
+        </div>
     </p>
     <script>
         document.getElementById("date").innerHTML = Date();

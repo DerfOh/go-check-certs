@@ -1,28 +1,25 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
+	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"time"
 
-	"html/template"
+	"github.com/gorilla/mux"
 )
 
-// import (
-// 	"html/template"
-// 	"net/http"
-// )
-type HostName struct {
-	name   string
-}
+// GET string constant
+var GET = "GET"
+
+// POST string constant
+var POST = "POST"
 
 func serveHTTP() {
 	var dir string
 
 	dir = "./results"
-	//  flag.StringVar(&dir, "dir", ".", "the directory to serve files from. Defaults to the current dir")
-	//  flag.Parse()
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
@@ -44,17 +41,41 @@ func serveHTTP() {
 // HomeHandler for home requests
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("index.html"))
-	if r.Method != http.MethodPost {
+	fmt.Println(r.Method)
+	switch r.Method {
+	case GET:
+		refreshResults()
 		tmpl.Execute(w, nil)
-		return
+	case POST:
+		r.ParseForm()
+		// send addhost the hostname in the form, using index 0 because you should only add one at a time, otherwise go will interpret it as a stringarray
+		fmt.Println(r.Form["hostname"][0])
+		fmt.Println(r.Form["submit"][0])
+
+		// switch to check if the add or remove button was pressed
+		switch r.Form["submit"][0] {
+		case "add":
+			fmt.Println("adding " + r.Form["hostname"][0])
+			addHost(r.Form["hostname"][0])
+			refreshResults()
+		case "remove":
+			fmt.Println("removing " + r.Form["hostname"][0])
+			removeHost(r.Form["hostname"][0])
+			refreshResults()
+		case "refresh":
+			refreshResults()
+		default:
+			refreshResults()
+		}
+		tmpl.Execute(w, struct{ Success bool }{true})
+	default:
+		refreshResults()
+		tmpl.Execute(w, struct{ Success bool }{true})
 	}
-	
-	refreshResults()
-	tmpl.Execute(w, struct{ Success bool }{true})
 }
 
-// RefreshHandler removes results file, then generates a new one
+// RefreshHandler removes results file, then generates a new one, this allows for a cURL cron or some other mechanism to refresh the results in an automated fashion
 func RefreshHandler(w http.ResponseWriter, r *http.Request) {
 	refreshResults()
-	w.Write([]byte("Refresh page to view results."))
+	w.Write([]byte("refresh complete"))
 }
