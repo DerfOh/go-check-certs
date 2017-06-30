@@ -37,6 +37,10 @@ Simply run the binary from a directory containing index.html and directory resul
 
 Then visit [http://localhost:8080](http://localhost:8080)
 
+The CSV file will be available at [http://localhost:8080/results/results.csv](http://localhost:8080/results/results.csv)
+
+This also makes any GET to [http://localhost:8080/refresh](http://localhost:8080/refresh) perform a scan. This is useful for automatically updating the results file.
+
 Current limitations:
 --------------------
 
