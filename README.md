@@ -26,6 +26,17 @@ i https://self-signed.example.com
 
 go-check-certs will skip verifying `self-signed.example.com`'s cert, but will perform the same signing algorithm and expiration checks on all certs in the bundle. Please be warned that this approach is vulnerable to mitm attacks, as the cert is not verfied against the root CA.
 
+## HTTP Interface
+
+go-check-certs has a simple web interface and http server which can be used for hosting a csv and automating scans via webcall
+
+Simply run the binary from a directory containing index.html and directory results/
+```
+./go-check-certs -serve
+```
+
+Then visit [http://localhost:8080](http://localhost:8080)
+
 Current limitations:
 --------------------
 
