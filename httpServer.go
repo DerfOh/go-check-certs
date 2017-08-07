@@ -19,7 +19,7 @@ var POST = "POST"
 func serveHTTP() {
 	var dir string
 
-	dir = "./results"
+	dir = *resultsDir
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)

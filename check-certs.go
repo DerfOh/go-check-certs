@@ -59,7 +59,8 @@ var sunsetSigAlgs = map[x509.SignatureAlgorithm]sigAlgSunset{
 }
 
 var (
-	hostsFile    = flag.String("hosts", "", "The path to the file containing a list of hosts to check.")
+	hostsFile    = flag.String("hosts", "hosts.txt", "The path to the file containing a list of hosts to check.")
+	resultsDir   = flag.String("results", "results/", "Absolute path of where you want to store the results")
 	warnYears    = flag.Int("years", 0, "Warn if the certificate will expire within this many years.")
 	warnMonths   = flag.Int("months", 0, "Warn if the certificate will expire within this many months.")
 	warnDays     = flag.Int("days", 0, "Warn if the certificate will expire within this many days.")
@@ -102,6 +103,9 @@ func main() {
 	}
 	if *concurrency < 0 {
 		*concurrency = defaultConcurrency
+	}
+	if len(*resultsDir) == 0 {
+		*resultsDir = "./results/"
 	}
 	if *outPutToFile {
 		changeToCSV()

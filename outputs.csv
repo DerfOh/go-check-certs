@@ -1,0 +1,5 @@
+hostname, Common Name, S/N, time to expire, expiration date
+google.com:443, '*.google.com', (S/N 7D610D46964B7DDC), 74 days, 2017-10-17 08:28:00 +0000 UTC
+github.com:443, 'github.com', (S/N BFDB4090AD7B5E640C30B16C9529A27), 286 days, 2018-05-17 12:00:00 +0000 UTC
+amazon.com:443, 'www.amazon.com', (S/N 1D4ABDAA78D09AFE799D41BCEB7A7662), 149 days, 2017-12-31 23:59:59 +0000 UTC
+duckduckgo.com:443, 'duckduckgo.com', (S/N AD9B00801718556792CD5C6FC12421D), 308 days, 2018-06-08 12:00:00 +0000 UTC
