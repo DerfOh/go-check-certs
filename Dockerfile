@@ -8,13 +8,22 @@ FROM ubuntu:latest
 
 MAINTAINER DerfOh <fredrick.p@outlook.com>
 
-# Set env variables
+# Update packages and ca-certificates
+# RUN apk update
+
+# RUN apk add ca-certificates
+
+RUN apt-get update -y
+RUN apt-get install  -y ca-certificates
+
+# Set up results directory and files
+
+RUN mkdir -p /app/results
+
+### Set env variables ##
 ENV CHECK_SIG_ALG true
 
 ENV CONCURRENCY 8
-
-# TODO: Figure out best way to handle hosts file
-# ENV HOSTS
 
 ENV DAYS 0
 
@@ -24,31 +33,22 @@ ENV YEARS 1
 
 ENV OUTPUT false
 
-ENV SERVE false
+# Uncomment if you want to serve automatically
+ENV SERVE true
+# ENV SERVE false
+
+# Set where the results should be, this has to be an absolute path
+ENV RESULTS /app/results/
 
 EXPOSE 8080 8080
 
 # Move files over to container
 
-COPY go-check-certs /usr/bin
+COPY go-check-certs /app
 
-COPY index.html /usr/bin
+COPY index.html /app
 
-COPY hosts.txt /usr/bin
+COPY hosts.txt /app
 
-# Set up results directory and files
-
-RUN mkdir /usr/bin/results
-
-RUN touch /usr/bin/results/results.csv
-
-# Update packages and ca-certificates
-# RUN apk update
-
-# RUN apk add ca-certificates
-
-RUN apt-get update -y
-RUN apt-get install  -y ca-certificates
-
-ENTRYPOINT ["sh", "-c", "/usr/bin/go-check-certs -check-sig-alg=${CHECK_SIG_ALG} -concurrency=${CONCURRENCY} -hosts=/usr/bin/hosts.txt -days=${DAYS} -months=${MONTHS} -years=${YEARS} -serve=${SERVE} -output=${OUTPUT} -results=${RESULTS}"]
+ENTRYPOINT ["sh", "-c", "/app/go-check-certs -check-sig-alg=${CHECK_SIG_ALG} -concurrency=${CONCURRENCY} -hosts=/app/hosts.txt -days=${DAYS} -months=${MONTHS} -years=${YEARS} -serve=${SERVE} -output=${OUTPUT} -results=${RESULTS}"]
 # ENTRYPOINT ["sh"]
