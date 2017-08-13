@@ -10,6 +10,8 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -59,15 +61,16 @@ var sunsetSigAlgs = map[x509.SignatureAlgorithm]sigAlgSunset{
 }
 
 var (
-	hostsFile    = flag.String("hosts", "hosts.txt", "The path to the file containing a list of hosts to check.")
-	resultsDir   = flag.String("results", "results/", "Absolute path of where you want to store the results")
-	warnYears    = flag.Int("years", 0, "Warn if the certificate will expire within this many years.")
-	warnMonths   = flag.Int("months", 0, "Warn if the certificate will expire within this many months.")
-	warnDays     = flag.Int("days", 0, "Warn if the certificate will expire within this many days.")
-	checkSigAlg  = flag.Bool("check-sig-alg", true, "Verify that non-root certificates are using a good signature algorithm.")
-	concurrency  = flag.Int("concurrency", defaultConcurrency, "Maximum number of hosts to check at once.")
-	outPutToFile = flag.Bool("output", false, "Output results to csv")        // create output file results.csv for results
-	serveFile    = flag.Bool("serve", false, "Serve output csv on port 8080") // create outputfile and serve results.csv on port 8080
+	appDir, appDirErr = filepath.Abs(filepath.Dir(os.Args[0]))
+	hostsFile         = flag.String("hosts", appDir+"/hosts.txt", "The path to the file containing a list of hosts to check.")
+	resultsDir        = flag.String("results", appDir+"/results", "Absolute path of where you want to store the results")
+	warnYears         = flag.Int("years", 0, "Warn if the certificate will expire within this many years.")
+	warnMonths        = flag.Int("months", 0, "Warn if the certificate will expire within this many months.")
+	warnDays          = flag.Int("days", 0, "Warn if the certificate will expire within this many days.")
+	checkSigAlg       = flag.Bool("check-sig-alg", true, "Verify that non-root certificates are using a good signature algorithm.")
+	concurrency       = flag.Int("concurrency", defaultConcurrency, "Maximum number of hosts to check at once.")
+	outPutToFile      = flag.Bool("output", false, "Output results to csv")        // create output file results.csv for results
+	serveFile         = flag.Bool("serve", false, "Serve output csv on port 8080") // create outputfile and serve results.csv on port 8080
 )
 
 type certErrors struct {
@@ -85,10 +88,6 @@ func main() {
 
 	flag.Parse()
 
-	if len(*hostsFile) == 0 {
-		flag.Usage()
-		return
-	}
 	if *warnYears < 0 {
 		*warnYears = 0
 	}
@@ -103,9 +102,6 @@ func main() {
 	}
 	if *concurrency < 0 {
 		*concurrency = defaultConcurrency
-	}
-	if len(*resultsDir) == 0 {
-		*resultsDir = "./results/"
 	}
 	if *outPutToFile {
 		changeToCSV()
@@ -147,6 +143,9 @@ func processHosts() {
 	for r := range results {
 		if r.err != nil {
 			fmt.Printf("%s: %v", r.host, r.err)
+			if *outPutToFile {
+				outputProblemCert(r.host, r.err.Error())
+			}
 			continue
 		}
 		fmt.Println(columnNames)
@@ -155,7 +154,7 @@ func processHosts() {
 				fmt.Println(err)
 				// write output file
 				if *outPutToFile {
-					outPutFile(err)
+					outputCert(err)
 				}
 			}
 		}

@@ -3,18 +3,13 @@
 #   This will cross compile the go binary to linux then
 #   runs docker build to add the binary
 
-# FROM alpine:latest
-FROM ubuntu:latest
+FROM alpine:latest
 
 MAINTAINER DerfOh <fredrick.p@outlook.com>
 
 # Update packages and ca-certificates
-# RUN apk update
-
-# RUN apk add ca-certificates
-
-RUN apt-get update -y
-RUN apt-get install  -y ca-certificates
+RUN apk update
+RUN apk add ca-certificates
 
 # Set up results directory and files
 
@@ -33,17 +28,14 @@ ENV YEARS 1
 
 ENV OUTPUT false
 
-# Uncomment if you want to serve automatically
-ENV SERVE true
-# ENV SERVE false
+ENV SERVE false
 
-# Set where the results should be, this has to be an absolute path
-ENV RESULTS /app/results/
+# Results path must be absolute path
+# ENV RESULTS /app/results/
 
 EXPOSE 8080 8080
 
-# Move files over to container
-
+## Move files over to container ##
 COPY go-check-certs /app
 
 COPY index.html /app
@@ -51,4 +43,4 @@ COPY index.html /app
 COPY hosts.txt /app
 
 ENTRYPOINT ["sh", "-c", "/app/go-check-certs -check-sig-alg=${CHECK_SIG_ALG} -concurrency=${CONCURRENCY} -hosts=/app/hosts.txt -days=${DAYS} -months=${MONTHS} -years=${YEARS} -serve=${SERVE} -output=${OUTPUT} -results=${RESULTS}"]
-# ENTRYPOINT ["sh"]
+# Example Usage: docker run -e SERVE='true' -e YEARS=1 -it -p 8080:8080 derfoh/go-check-certs

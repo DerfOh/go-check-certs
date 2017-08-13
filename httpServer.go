@@ -40,7 +40,8 @@ func serveHTTP() {
 
 // HomeHandler for home requests
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("/app/index.html"))
+
+	tmpl := template.Must(template.ParseFiles(appDir + "/index.html"))
 	fmt.Println(r.Method)
 	switch r.Method {
 	case GET:
