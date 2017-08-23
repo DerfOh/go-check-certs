@@ -8,20 +8,30 @@ import (
 	"strings"
 )
 
-func outPutFile(outPut error) error {
-	f, err := os.OpenFile("results/results.csv", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+func outputCert(outPut error) error {
+	f, err := os.OpenFile(*resultsDir+"/results.csv", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	check(err)
 	defer f.Close()
 
 	_, err = f.WriteString(outPut.Error() + "\n")
 	check(err)
 	return nil
+}
 
+func outputProblemCert(outPut string, problem string) {
+	f, err := os.OpenFile(*resultsDir+"/results.csv", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	check(err)
+	defer f.Close()
+	// First remove the commas from the problem variable, otherwise new columns get made for each comma
+	problem = strings.Replace(problem, ",", "", -1)
+	_, err = f.WriteString(outPut + ",,,," + problem + "\n")
+	check(err)
+	return
 }
 
 func createOutPutFile() {
 	// write output file
-	f, err := os.Create("results/results.csv")
+	f, err := os.Create(*resultsDir + "/results.csv")
 	check(err)
 	defer f.Close()
 
@@ -34,7 +44,7 @@ func createOutPutFile() {
 }
 
 func refreshResults() {
-	err := os.Remove("results/results.csv")
+	err := os.Remove(*resultsDir + "/results.csv")
 	createOutPutFile()
 	processHosts()
 	check(err)
@@ -60,7 +70,7 @@ func removeHost(s string) {
 	lines := strings.Split(string(input), "\n")
 
 	for i, line := range lines {
-		if strings.Contains(line, s) {
+		if strings.Contains(line, s) && s != "" {
 			lines[i] = ""
 		}
 	}

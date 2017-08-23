@@ -19,18 +19,18 @@ var POST = "POST"
 func serveHTTP() {
 	var dir string
 
-	dir = "./results"
+	dir = *resultsDir
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/refresh", RefreshHandler)
 
-	// This will serve files under http://localhost:8000/results/<filename>
+	// This will serve files under http://localhost:8080/results/<filename>
 	r.PathPrefix("/results/").Handler(http.StripPrefix("/results/", http.FileServer(http.Dir(dir))))
 
 	srv := &http.Server{
 		Handler:      r,
-		Addr:         "127.0.0.1:8080",
+		Addr:         "0.0.0.0:8080",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
@@ -40,7 +40,8 @@ func serveHTTP() {
 
 // HomeHandler for home requests
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("index.html"))
+
+	tmpl := template.Must(template.ParseFiles(appDir + "/index.html"))
 	fmt.Println(r.Method)
 	switch r.Method {
 	case GET:
