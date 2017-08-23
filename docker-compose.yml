@@ -1,0 +1,11 @@
+go-check-certs:
+  image: derfoh/go-check-certs:latest
+  container_name: go-check-certs
+  ports:
+    - "8080:8080"
+  restart: always
+  environment:
+    - SERVE=true
+    - YEARS=1
+  # volumes:
+  #   - ~/app/:/path/to/hosts/ # bind path to hosts.txt
