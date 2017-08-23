@@ -198,7 +198,7 @@ func processQueue(done <-chan struct{}, hosts <-chan string, results chan<- host
 
 func checkHost(host string) hostResult {
 	if len(host) >= 2 && host[0:2] == "i " {
-		return checkUnverfiedHost(host[2:])
+		return checkUnverifiedHost(host[2:])
 	} else {
 		return checkVerifiedHost(host)
 	}
@@ -229,7 +229,7 @@ func checkVerifiedHost(host string) (result hostResult) {
 	return
 }
 
-func checkUnverfiedHost(host string) (result hostResult) {
+func checkUnverifiedHost(host string) (result hostResult) {
 	result = hostResult{
 		host:  host,
 		certs: []certErrors{},
