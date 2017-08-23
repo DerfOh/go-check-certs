@@ -18,13 +18,13 @@ The hosts file is simply a single `hostname:port` per line. Empty lines or lines
 
 go-check-certs is able to validate signature algorithms and expiration dates for self-signed certificates.
 
-Prefix insecure host urls that cannot be verfied against the root CA with "i ".
+Prefix insecure host urls that cannot be verified against the root CA with "i ".
 
 ```
 i https://self-signed.example.com
 ```
 
-go-check-certs will skip verifying `self-signed.example.com`'s cert, but will perform the same signing algorithm and expiration checks on all certs in the bundle. Please be warned that this approach is vulnerable to mitm attacks, as the cert is not verfied against the root CA.
+go-check-certs will skip verifying `self-signed.example.com`'s cert, but will perform the same signing algorithm and expiration checks on all certs in the bundle. Please be warned that this approach is vulnerable to mitm attacks, as the cert is not verified against the root CA.
 
 ## HTTP Interface
 
@@ -40,6 +40,16 @@ Then visit [http://localhost:8080](http://localhost:8080)
 The CSV file will be available at [http://localhost:8080/results/results.csv](http://localhost:8080/results/results.csv)
 
 This also makes any GET to [http://localhost:8080/refresh](http://localhost:8080/refresh) perform a scan. This is useful for automatically updating the results file.
+
+## Docker
+```
+docker run -e SERVE=true -e YEARS=1 -it -p 8080:8080 derfoh/go-check-certs
+```
+or if you prefer docker-compose
+```
+docker-compose up
+```
+You can change the path to the hosts.txt file by editing the volume line in docker-compose.yml
 
 Current limitations:
 --------------------
