@@ -8,4 +8,4 @@ go-check-certs:
     - SERVE=true
     - YEARS=1
   volumes:
-     - ~/app/:~/go-projects/src/github.com/derfoh/go-check-certs/ # bind path to hosts.txt
+     - $GOPATH/src/github.com/derfoh/go-check-certs/hosts:/app/hosts # bind path to hosts.txt

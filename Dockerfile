@@ -32,9 +32,6 @@ ENV SERVE false
 
 ENV HOSTS /app/hosts/hosts.txt
 
-# Results path must be absolute path
-# ENV RESULTS /app/results/
-
 EXPOSE 8080 8080
 
 ## Move files over to container ##
