@@ -13,7 +13,7 @@ RUN apk add ca-certificates
 
 # Set up results directory and files
 
-RUN mkdir -p /app/results
+RUN mkdir -p /app/results /app/hosts
 
 ### Set env variables ##
 ENV CHECK_SIG_ALG true
@@ -30,7 +30,7 @@ ENV OUTPUT false
 
 ENV SERVE false
 
-ENV HOSTS /app/hosts.txt
+ENV HOSTS /app/hosts/hosts.txt
 
 # Results path must be absolute path
 # ENV RESULTS /app/results/
@@ -42,7 +42,7 @@ COPY go-check-certs /app
 
 COPY index.html /app
 
-COPY hosts.txt /app
+COPY hosts.txt /app/hosts
 
 ENTRYPOINT ["sh", "-c", "/app/go-check-certs -check-sig-alg=${CHECK_SIG_ALG} -concurrency=${CONCURRENCY} -hosts=${HOSTS} -days=${DAYS} -months=${MONTHS} -years=${YEARS} -serve=${SERVE} -output=${OUTPUT} -results=${RESULTS}"]
-# Example Usage: docker run -e SERVE='true' -e YEARS=1 -it -p 8080:8080 derfoh/go-check-certs
+# Example Usage: docker run -e SERVE=true -e YEARS=1 -it -p 8080:8080 derfoh/go-check-certs

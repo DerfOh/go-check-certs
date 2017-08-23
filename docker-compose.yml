@@ -7,5 +7,5 @@ go-check-certs:
   environment:
     - SERVE=true
     - YEARS=1
-  # volumes:
-  #   - ~/app/:/path/to/hosts/ # bind path to hosts.txt
+  volumes:
+     - ~/app/:~/go-projects/src/github.com/derfoh/go-check-certs/ # bind path to hosts.txt
