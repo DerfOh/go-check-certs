@@ -39,7 +39,7 @@ COPY go-check-certs /app
 
 COPY index.html /app
 
-COPY hosts.txt /app/hosts
+COPY /hosts/hosts.txt /app/hosts
 
 ENTRYPOINT ["sh", "-c", "/app/go-check-certs -check-sig-alg=${CHECK_SIG_ALG} -concurrency=${CONCURRENCY} -hosts=${HOSTS} -days=${DAYS} -months=${MONTHS} -years=${YEARS} -serve=${SERVE} -output=${OUTPUT} -results=${RESULTS}"]
 # Example Usage: docker run -e SERVE=true -e YEARS=1 -it -p 8080:8080 derfoh/go-check-certs
